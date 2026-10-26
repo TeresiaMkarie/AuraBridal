@@ -1,0 +1,6 @@
+{
+  "name": "Aura Bridal",
+  "description": "Minimal, handcrafted gowns, luminous bridal jewelry, and timeless wedding essentials.",
+  "permissions": [],
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
