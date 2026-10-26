@@ -475,7 +475,7 @@ export const AccountDashboard: React.FC<AccountDashboardProps> = ({
                   <div className="dash-vendor-img-wrap">
                     <span className="dash-match-tag">98% match</span>
                     <img
-                      src="/images/bridal-gown-mulberry.jpg"
+                      src="/images/gown-vivienne.jpg"
                       alt="Karen Flagship Atelier"
                       className="dash-vendor-img"
                     />
@@ -515,7 +515,7 @@ export const AccountDashboard: React.FC<AccountDashboardProps> = ({
                   <div className="dash-vendor-img-wrap">
                     <span className="dash-match-tag">95% match</span>
                     <img
-                      src="/images/bridal-veil-cathedral.jpg"
+                      src="/images/bridal-veil.jpg"
                       alt="Gigiri Private Suite"
                       className="dash-vendor-img"
                     />
@@ -535,7 +535,7 @@ export const AccountDashboard: React.FC<AccountDashboardProps> = ({
                   <div className="dash-vendor-img-wrap">
                     <span className="dash-match-tag">94% match</span>
                     <img
-                      src="/images/bridal-jewelry-earrings.jpg"
+                      src="/images/pearl-earrings.jpg"
                       alt="Mombasa Coastal Atelier"
                       className="dash-vendor-img"
                     />
