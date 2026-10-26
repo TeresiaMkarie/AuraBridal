@@ -1,12 +1,10 @@
 # Aura Bridal
 
-An elevated, modern bridal atelier web application handcrafted for brides seeking refined simplicity, timeless gowns, luminous jewelry, and artisanal wedding essentials.
-
-Rewritten as a modern React application with TypeScript and Vite.
+Aura Bridal is an elevated, modern bridal atelier web application handcrafted for brides seeking refined simplicity, timeless gowns, luminous jewelry, and artisanal wedding essentials.
 
 ## Features
 
-- **2026 Bridal Collection**: Minimalist aesthetic showcasing handcrafted gowns, cathedral veils, fine pearl jewelry, satin pumps, and clutches.
+- **Modern Bridal Collection**: Minimalist aesthetic showcasing handcrafted gowns, cathedral veils, fine pearl jewelry, satin pumps, and clutches.
 - **Curated Category Navigation**: Quick filtering across Gowns & Dresses, Fine Jewelry, Veils & Combs, and Bridal Shoes.
 - **Interactive Catalogue**:
   - Live real-time search across titles and descriptions
@@ -34,3 +32,10 @@ Rewritten as a modern React application with TypeScript and Vite.
 - **Bundler & Dev Server**: Vite
 - **Typography**: Cormorant Garamond & Montserrat
 - **Icons**: Minimalist inline SVG & Lucide
+
+## Image Assets
+
+All application images are stored in `public/images` and referenced from `/images/...`.
+
+## Developed
+Aura Bridal is built and developed By `Teresia Mkarie`.
