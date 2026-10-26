@@ -145,6 +145,20 @@ export const PRODUCTS: Product[] = [
     silhouette: 'shoes',
   },
   {
+    id: 'p9',
+    name: 'Elysian Pearl Strappy Bridal Sandals',
+    category: 'shoes',
+    price: 390,
+    rating: 5.0,
+    reviewsCount: 34,
+    image: '/images/bridal-shoes-sandals.jpg',
+    description: 'Bespoke ivory silk satin open-toe sandals featuring hand-embellished freshwater pearl cross straps and a delicate crystal-lined ankle cuff.',
+    subtitle: 'Hand-set freshwater pearls with crystal ankle strap',
+    badge: 'NEW BRIDAL HEIRLOOM',
+    vibe: 'classic',
+    silhouette: 'shoes',
+  },
+  {
     id: 'p8',
     name: 'Pearl Encrusted Bridal Clutch',
     category: 'accessories',
@@ -164,5 +178,5 @@ export const CATEGORIES: Category[] = [
   { id: 'dresses', name: 'Haute Couture Gowns', image: '/images/gown-genevieve.jpg' },
   { id: 'jewelry', name: 'Fine Bridal Jewelry', image: '/images/pearl-earrings.jpg' },
   { id: 'veils', name: 'Cathedral Veils & Combs', image: '/images/bridal-veil.jpg' },
-  { id: 'shoes', name: 'Artisan Bridal Shoes', image: '/images/bridal-shoes.jpg' },
+  { id: 'shoes', name: 'Artisan Bridal Shoes', image: '/images/bridal-shoes-sandals.jpg' },
 ];

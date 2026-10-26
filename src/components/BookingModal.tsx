@@ -17,11 +17,56 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [phone, setPhone] = useState('');
   const [weddingDate, setWeddingDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [dateError, setDateError] = useState('');
+
+  // Enforce valid wedding date: not in the past, and within 1 year from today
+  const { minDate, maxDate } = React.useMemo(() => {
+    const today = new Date();
+    const formatLocalDate = (d: Date) => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    };
+    const min = formatLocalDate(today);
+    const oneYearLater = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+    const max = formatLocalDate(oneYearLater);
+    return { minDate: min, maxDate: max };
+  }, []);
 
   if (!isOpen) return null;
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setWeddingDate(val);
+    if (!val) {
+      setDateError('');
+      return;
+    }
+    if (val < minDate) {
+      setDateError('Please select an upcoming date. Dates in the past cannot be scheduled.');
+    } else if (val > maxDate) {
+      setDateError('Please select a date within the next 12 months for atelier fittings.');
+    } else {
+      setDateError('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!weddingDate) {
+      setDateError('Please select your wedding date.');
+      return;
+    }
+    if (weddingDate < minDate) {
+      setDateError('Please select an upcoming date. Dates in the past cannot be scheduled.');
+      return;
+    }
+    if (weddingDate > maxDate) {
+      setDateError('Please select a date within the next 12 months for atelier fittings.');
+      return;
+    }
+    setDateError('');
     onSuccess(salon);
     onClose();
   };
@@ -123,16 +168,42 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           </div>
 
           <div className="form-group" style={{ margin: 0 }}>
-            <label style={{ fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--color-muted)', marginBottom: '5px', display: 'block' }}>
-              Wedding Date
-            </label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '5px' }}>
+              <label style={{ fontSize: '10px', letterSpacing: '1.2px', textTransform: 'uppercase', color: 'var(--color-muted)', margin: 0, display: 'block' }}>
+                Wedding Date
+              </label>
+              <span style={{ fontSize: '10px', color: 'var(--color-muted)', letterSpacing: '0.3px', fontWeight: 400 }}>
+                (Upcoming within 12 months)
+              </span>
+            </div>
             <input
               type="date"
               required
+              min={minDate}
+              max={maxDate}
               value={weddingDate}
-              onChange={(e) => setWeddingDate(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', fontSize: '13px', borderColor: 'var(--color-border)', borderRadius: '2px' }}
+              onChange={handleDateChange}
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                fontSize: '13px',
+                borderColor: dateError ? '#b91c1c' : 'var(--color-border)',
+                backgroundColor: dateError ? '#fef2f2' : undefined,
+                borderRadius: '2px',
+                outline: 'none',
+                transition: 'border-color 0.2s, background-color 0.2s',
+              }}
             />
+            {dateError && (
+              <div style={{ color: '#b91c1c', fontSize: '11px', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '5px', lineHeight: 1.3 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{dateError}</span>
+              </div>
+            )}
           </div>
 
           <div className="form-group" style={{ margin: 0 }}>

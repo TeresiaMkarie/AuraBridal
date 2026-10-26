@@ -13,6 +13,7 @@ interface NavbarProps {
   onOpenCompare: () => void;
   onOpenSearch: () => void;
   onOpenBooking: () => void;
+  onOpenDashboard?: () => void;
   onNavigate: (sectionId: string) => void;
 }
 
@@ -26,6 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenWishlist,
   onOpenSearch,
   onOpenBooking,
+  onOpenDashboard,
   onNavigate,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -114,7 +116,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               AURA BRIDAL
             </a>
-            <span className="brand-subtitle">ATELIER NAIROBI.KENYA</span>
+            <span className="brand-subtitle">
+              ATELIER NAIROBI <span className="brand-subtitle-dot">&bull;</span> KENYA
+            </span>
           </div>
 
           {/* Right Column: Search, Wishlist, Bag, Login, Book Fitting */}
@@ -209,6 +213,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                       )}
                     </div>
                     <div className="user-dropdown-menu-items">
+                      {onOpenDashboard && (
+                        <button
+                          className="user-menu-item"
+                          style={{ backgroundColor: '#FFFBEB', color: '#92400E', fontWeight: 600 }}
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            onOpenDashboard();
+                          }}
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                            <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                            <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                            <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                          </svg>
+                          <span>Wedding Dashboard</span>
+                        </button>
+                      )}
                       <button
                         className="user-menu-item"
                         onClick={() => {
@@ -256,29 +278,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 )}
               </div>
             ) : (
-              <div className="nav-auth-group">
-                <button
-                  type="button"
-                  className="action-link-btn nav-auth-link"
-                  onClick={() => onOpenAuth('signin')}
-                  title="Sign In to Atelier"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                  <span>LOGIN</span>
-                </button>
-                <span className="auth-separator" aria-hidden="true">·</span>
-                <button
-                  type="button"
-                  className="action-link-btn nav-auth-link nav-signup-link"
-                  onClick={() => onOpenAuth('signup')}
-                  title="Create Atelier Account"
-                >
-                  <span>SIGN UP</span>
-                </button>
-              </div>
+              <button
+                type="button"
+                className="btn-get-started"
+                onClick={() => onOpenAuth('signin')}
+                title="Get Started"
+              >
+                GET STARTED
+              </button>
             )}
 
             {/* Book Private Fitting (right-most CTA) */}
@@ -350,28 +357,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 </div>
               ) : (
-                <div className="mobile-auth-group">
-                  <button
-                    type="button"
-                    className="mobile-login-btn"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenAuth('signin');
-                    }}
-                  >
-                    LOGIN
-                  </button>
-                  <button
-                    type="button"
-                    className="mobile-signup-btn"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onOpenAuth('signup');
-                    }}
-                  >
-                    SIGN UP
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  className="mobile-get-started-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuth('signin');
+                  }}
+                >
+                  GET STARTED
+                </button>
               )}
             </div>
           </div>

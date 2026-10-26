@@ -18,6 +18,7 @@ import { QuickViewModal } from './components/QuickViewModal';
 import { CheckoutModal } from './components/CheckoutModal';
 import { BookingModal } from './components/BookingModal';
 import { AuthModal } from './components/AuthModal';
+import { AccountDashboard } from './components/AccountDashboard';
 import { Toast } from './components/Toast';
 
 export const App: React.FC = () => {
@@ -57,6 +58,7 @@ export const App: React.FC = () => {
   const [quickViewProductId, setQuickViewProductId] = useState<string | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'store' | 'dashboard'>('store');
 
 
   // Toast
@@ -175,16 +177,39 @@ export const App: React.FC = () => {
   const handleLoginSuccess = (profile: UserProfile) => {
     setUser(profile);
     localStorage.setItem('aura_atelier_user', JSON.stringify(profile));
-    showToast(`✨ Bienvenue, ${profile.name}. Your atelier account is active.`);
+    setCurrentView('dashboard');
+    showToast(`✨ Welcome to your wedding account, ${profile.name.split(' ')[0]}!`);
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('aura_atelier_user');
+    setCurrentView('store');
     showToast('You have signed out of your atelier account.');
   };
 
   const totalCartCount = cart.reduce((acc, i) => acc + i.qty, 0);
+
+  if (currentView === 'dashboard' && user) {
+    return (
+      <div className="app-root">
+        <AccountDashboard
+          user={user}
+          onBackToStore={() => setCurrentView('store')}
+          onLogout={handleLogout}
+          onOpenBooking={() => setIsBookingOpen(true)}
+        />
+        <BookingModal
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          onSuccess={(salonName) =>
+            showToast(`🍾 Private fitting & Champagne tasting confirmed for ${salonName}!`)
+          }
+        />
+        <Toast message={toastMessage} />
+      </div>
+    );
+  }
 
   return (
     <div className="app-root">
@@ -204,6 +229,7 @@ export const App: React.FC = () => {
           setTimeout(() => document.getElementById('searchInput')?.focus(), 400);
         }}
         onOpenBooking={() => setIsBookingOpen(true)}
+        onOpenDashboard={() => setCurrentView('dashboard')}
         onNavigate={scrollToSection}
       />
 
