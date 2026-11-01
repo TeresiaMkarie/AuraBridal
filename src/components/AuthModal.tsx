@@ -76,8 +76,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     e.preventDefault();
     const targetEmail = email.trim() || 'your email address';
     setSuccessNotice(`Password reset instructions sent to ${targetEmail}`);
-    setErrorMessage('');
   };
+
+  if (!isOpen) return null;
 
   return (
     <div
@@ -87,39 +88,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       role="presentation"
     >
       <div
-        className="auth-accessory-card"
+        className="modal-content modal-md"
+        style={{ maxWidth: '440px', padding: '36px 32px' }}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
-        {/* Top Bridal Accessory Header - Permanently mounted in DOM */}
-        <div className="auth-accessory-header">
-          <img
-            src="/images/bridal-accessory-header.jpg"
-            alt="Aura Bridal Heirloom Pearl Accessory"
-            className="auth-accessory-image"
-            loading="eager"
-            decoding="sync"
-          />
-          <div className="auth-accessory-gradient-overlay" />
+        <div className="auth-sheet-container" style={{ position: 'relative', paddingTop: '32px' }}>
           <button
             type="button"
-            className="auth-accessory-close"
+            className="close-modal"
             onClick={onClose}
             aria-label="Close"
+            style={{ position: 'absolute', top: '16px', right: '18px', fontSize: '20px', cursor: 'pointer', color: '#78716C' }}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            &times;
           </button>
-        </div>
 
-        {/* Lower Curvature White Sheet Container */}
-        <div className="auth-sheet-container">
-          <div className="auth-sheet-header">
-            <h2 className="auth-sheet-title">
-              {mode === 'signin' ? 'Log in' : 'Sign up'}
+          <div className="auth-sheet-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{ fontFamily: 'var(--font-brand)', fontSize: '13px', letterSpacing: '3px', textTransform: 'uppercase', color: '#C5A880', marginBottom: '6px' }}>
+              Aura Bridal Atelier
+            </div>
+            <h2 className="auth-sheet-title" style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', fontWeight: 500, color: '#141312' }}>
+              {mode === 'signin' ? 'Log in' : 'Create Account'}
             </h2>
           </div>
 

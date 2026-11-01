@@ -177,8 +177,8 @@ export const App: React.FC = () => {
   const handleLoginSuccess = (profile: UserProfile) => {
     setUser(profile);
     localStorage.setItem('aura_atelier_user', JSON.stringify(profile));
-    setCurrentView('dashboard');
-    showToast(`✨ Welcome to your wedding account, ${profile.name.split(' ')[0]}!`);
+    setCurrentView('store');
+    showToast(`✨ Welcome to Aura Bridal Atelier, ${profile.name.split(' ')[0]}!`);
   };
 
   const handleLogout = () => {
