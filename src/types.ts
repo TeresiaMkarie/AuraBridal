@@ -52,6 +52,9 @@ export interface UserProfile {
   email: string;
   role?: string;
   weddingDate?: string;
+  avatarUrl?: string;
+  partnerName?: string;
+  venue?: string;
 }
 
 

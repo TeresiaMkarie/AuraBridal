@@ -101,6 +101,28 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Style Match
               </a>
+              {onOpenDashboard && (
+                <button
+                  type="button"
+                  onClick={onOpenDashboard}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '2px',
+                    textTransform: 'uppercase',
+                    color: 'var(--color-accent-gold, #C5A880)',
+                    padding: 0,
+                    transition: 'opacity 0.2s ease',
+                  }}
+                  title="Open Wedding Dashboard"
+                >
+                  Dashboard
+                </button>
+              )}
             </nav>
           </div>
 
@@ -179,8 +201,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   aria-expanded={userMenuOpen}
                   title={`Account: ${user.name}`}
                 >
-                  <span className="user-avatar-circle">
-                    {user.name.charAt(0).toUpperCase()}
+                  <span className="user-avatar-circle" style={{ overflow: 'hidden' }}>
+                    {user.avatarUrl ? (
+                      <img src={user.avatarUrl} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      user.name.charAt(0).toUpperCase()
+                    )}
                   </span>
                   <span className="user-nav-name">{user.name.split(' ')[0]}</span>
                   <svg
@@ -329,6 +355,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Style Match
               </a>
+              {onOpenDashboard && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenDashboard();
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    textAlign: 'left',
+                    color: 'var(--color-accent-gold, #C5A880)',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: '8px 0',
+                    fontSize: '14px',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Wedding Dashboard
+                </button>
+              )}
             </div>
 
             <div className="mobile-nav-bottom">

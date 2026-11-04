@@ -82,34 +82,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div
-      className={`modal-overlay auth-overlay-clean ${isOpen ? 'active' : ''}`}
+      className={`auth-overlay-clean ${isOpen ? 'active' : ''}`}
       onClick={onClose}
       aria-hidden={!isOpen}
       role="presentation"
     >
       <div
-        className="modal-content modal-md"
-        style={{ maxWidth: '440px', padding: '36px 32px' }}
+        className="auth-accessory-card"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
       >
-        <div className="auth-sheet-container" style={{ position: 'relative', paddingTop: '32px' }}>
+        <div className="auth-accessory-header">
+          <img
+            src="/images/bridal-accessory-header.jpg"
+            alt="Aura Bridal Atelier"
+            className="auth-accessory-image"
+          />
+          <div className="auth-accessory-gradient-overlay" />
           <button
             type="button"
-            className="close-modal"
+            className="auth-accessory-close"
             onClick={onClose}
             aria-label="Close"
-            style={{ position: 'absolute', top: '16px', right: '18px', fontSize: '20px', cursor: 'pointer', color: '#78716C' }}
           >
             &times;
           </button>
+        </div>
 
-          <div className="auth-sheet-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
-            <div style={{ fontFamily: 'var(--font-brand)', fontSize: '13px', letterSpacing: '3px', textTransform: 'uppercase', color: '#C5A880', marginBottom: '6px' }}>
-              Aura Bridal Atelier
-            </div>
-            <h2 className="auth-sheet-title" style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', fontWeight: 500, color: '#141312' }}>
+        <div className="auth-sheet-container">
+          <div className="auth-sheet-header">
+            <h2 className="auth-sheet-title">
               {mode === 'signin' ? 'Log in' : 'Create Account'}
             </h2>
           </div>

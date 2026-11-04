@@ -21,18 +21,25 @@ import { AuthModal } from './components/AuthModal';
 import { AccountDashboard } from './components/AccountDashboard';
 import { Toast } from './components/Toast';
 
+const DEFAULT_USER: UserProfile = {
+  name: 'Alexandra Vance',
+  email: 'alexandra.vance@couture.com',
+  role: 'Bride',
+  weddingDate: 'October 2026',
+};
+
 export const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<string[]>(['p-icon-1', 'p-icon-2']);
   const [compareList, setCompareList] = useState<string[]>([]);
 
-  // Authentication State
-  const [user, setUser] = useState<UserProfile | null>(() => {
+  // Authentication State with default profile fallback
+  const [user, setUser] = useState<UserProfile>(() => {
     try {
       const saved = localStorage.getItem('aura_atelier_user');
-      return saved ? JSON.parse(saved) : null;
+      return saved ? JSON.parse(saved) : DEFAULT_USER;
     } catch {
-      return null;
+      return DEFAULT_USER;
     }
   });
 
@@ -58,7 +65,21 @@ export const App: React.FC = () => {
   const [quickViewProductId, setQuickViewProductId] = useState<string | null>(null);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'store' | 'dashboard'>('store');
+  const [currentView, setCurrentView] = useState<'store' | 'dashboard'>(() => {
+    try {
+      const saved = localStorage.getItem('aura_current_view');
+      return saved === 'store' ? 'store' : 'dashboard';
+    } catch {
+      return 'dashboard';
+    }
+  });
+
+  const handleNavigateView = (view: 'store' | 'dashboard') => {
+    setCurrentView(view);
+    try {
+      localStorage.setItem('aura_current_view', view);
+    } catch {}
+  };
 
 
   // Toast
@@ -177,27 +198,36 @@ export const App: React.FC = () => {
   const handleLoginSuccess = (profile: UserProfile) => {
     setUser(profile);
     localStorage.setItem('aura_atelier_user', JSON.stringify(profile));
-    setCurrentView('store');
+    handleNavigateView('dashboard');
     showToast(`✨ Welcome to Aura Bridal Atelier, ${profile.name.split(' ')[0]}!`);
   };
 
   const handleLogout = () => {
-    setUser(null);
+    setUser(DEFAULT_USER);
     localStorage.removeItem('aura_atelier_user');
-    setCurrentView('store');
+    handleNavigateView('store');
     showToast('You have signed out of your atelier account.');
+  };
+
+  const handleUpdateUser = (updated: UserProfile) => {
+    setUser(updated);
+    try {
+      localStorage.setItem('aura_atelier_user', JSON.stringify(updated));
+    } catch {}
+    showToast('✨ Profile & photo updated successfully!');
   };
 
   const totalCartCount = cart.reduce((acc, i) => acc + i.qty, 0);
 
-  if (currentView === 'dashboard' && user) {
+  if (currentView === 'dashboard') {
     return (
       <div className="app-root">
         <AccountDashboard
-          user={user}
-          onBackToStore={() => setCurrentView('store')}
+          user={user || DEFAULT_USER}
+          onBackToStore={() => handleNavigateView('store')}
           onLogout={handleLogout}
           onOpenBooking={() => setIsBookingOpen(true)}
+          onUpdateUser={handleUpdateUser}
         />
         <BookingModal
           isOpen={isBookingOpen}
@@ -229,7 +259,7 @@ export const App: React.FC = () => {
           setTimeout(() => document.getElementById('searchInput')?.focus(), 400);
         }}
         onOpenBooking={() => setIsBookingOpen(true)}
-        onOpenDashboard={() => setCurrentView('dashboard')}
+        onOpenDashboard={() => handleNavigateView('dashboard')}
         onNavigate={scrollToSection}
       />
 

@@ -168,7 +168,7 @@ export const AtelierIcons: React.FC<AtelierIconsProps> = ({
             className="link-arrow"
             onClick={onViewAllCreations}
           >
-            <span>VIEW ALL {products.length} CREATIONS</span>
+            <span>VIEW ALL CREATIONS</span>
             <span>&rarr;</span>
           </button>
         </div>
