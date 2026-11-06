@@ -153,6 +153,7 @@ export const AccountDashboard: React.FC<AccountDashboardProps> = ({
   const [profileVenue, setProfileVenue] = useState(user.venue || 'Karen Blixen Coffee Garden, Nairobi');
   const [profileAvatar, setProfileAvatar] = useState<string | undefined>(user.avatarUrl);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showCuratedAvatars, setShowCuratedAvatars] = useState(false);
 
   React.useEffect(() => {
     setProfileName(user.name);
@@ -1142,46 +1143,86 @@ export const AccountDashboard: React.FC<AccountDashboardProps> = ({
 
               {/* Quick sample bridal portraits to select from */}
               <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 600, color: '#718096', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-                  Or Choose a Curated Atelier Avatar:
-                </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  {[
-                    { label: 'Paris Bride', img: '/images/real-wedding-paris.jpg' },
-                    { label: 'Ravello Bride', img: '/images/real-wedding-ravello.jpg' },
-                    { label: 'Veil Bride', img: '/images/bridal-veil.jpg' },
-                    { label: 'Silk Gown', img: '/images/gown-vivienne.jpg' },
-                  ].map((preset) => (
-                    <button
-                      key={preset.label}
-                      type="button"
-                      onClick={() => {
-                        setProfileAvatar(preset.img);
-                        if (onUpdateUser) {
-                          onUpdateUser({
-                            ...user,
-                            avatarUrl: preset.img,
-                          });
-                        }
-                        setSaveSuccess(true);
-                        setTimeout(() => setSaveSuccess(false), 3000);
-                      }}
-                      style={{
-                        width: '44px',
-                        height: '44px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        padding: 0,
-                        border: profileAvatar === preset.img ? '2.5px solid #C89D35' : '1px solid #E2E8F0',
-                        cursor: 'pointer',
-                        transition: 'transform 0.15s ease',
-                      }}
-                      title={preset.label}
-                    >
-                      <img src={preset.img} alt={preset.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    </button>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCuratedAvatars((prev) => !prev)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: 'none',
+                    border: 'none',
+                    padding: '4px 0',
+                    cursor: 'pointer',
+                    color: '#718096',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    marginBottom: showCuratedAvatars ? '12px' : '0',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#C89D35')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#718096')}
+                >
+                  <span>Choose a curated atelier avatar</span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      transform: showCuratedAvatars ? 'rotate(90deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                    }}
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+
+                {showCuratedAvatars && (
+                  <div style={{ display: 'flex', gap: '10px', paddingTop: '4px' }}>
+                    {[
+                      { label: 'Paris Bride', img: '/images/real-wedding-paris.jpg' },
+                      { label: 'Ravello Bride', img: '/images/real-wedding-ravello.jpg' },
+                      { label: 'Veil Bride', img: '/images/bridal-veil.jpg' },
+                      { label: 'Silk Gown', img: '/images/gown-vivienne.jpg' },
+                    ].map((preset) => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        onClick={() => {
+                          setProfileAvatar(preset.img);
+                          if (onUpdateUser) {
+                            onUpdateUser({
+                              ...user,
+                              avatarUrl: preset.img,
+                            });
+                          }
+                          setSaveSuccess(true);
+                          setTimeout(() => setSaveSuccess(false), 3000);
+                        }}
+                        style={{
+                          width: '44px',
+                          height: '44px',
+                          borderRadius: '50%',
+                          overflow: 'hidden',
+                          padding: 0,
+                          border: profileAvatar === preset.img ? '2.5px solid #C89D35' : '1px solid #E2E8F0',
+                          cursor: 'pointer',
+                          transition: 'transform 0.15s ease',
+                        }}
+                        title={preset.label}
+                      >
+                        <img src={preset.img} alt={preset.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Profile Details Edit Form */}

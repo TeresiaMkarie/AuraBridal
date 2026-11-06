@@ -33,13 +33,13 @@ export const App: React.FC = () => {
   const [wishlist, setWishlist] = useState<string[]>(['p-icon-1', 'p-icon-2']);
   const [compareList, setCompareList] = useState<string[]>([]);
 
-  // Authentication State with default profile fallback
-  const [user, setUser] = useState<UserProfile>(() => {
+  // Authentication State
+  const [user, setUser] = useState<UserProfile | null>(() => {
     try {
       const saved = localStorage.getItem('aura_atelier_user');
-      return saved ? JSON.parse(saved) : DEFAULT_USER;
+      return saved ? JSON.parse(saved) : null;
     } catch {
-      return DEFAULT_USER;
+      return null;
     }
   });
 
@@ -68,9 +68,10 @@ export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'store' | 'dashboard'>(() => {
     try {
       const saved = localStorage.getItem('aura_current_view');
-      return saved === 'store' ? 'store' : 'dashboard';
+      const savedUser = localStorage.getItem('aura_atelier_user');
+      return saved === 'dashboard' && savedUser ? 'dashboard' : 'store';
     } catch {
-      return 'dashboard';
+      return 'store';
     }
   });
 
@@ -197,14 +198,20 @@ export const App: React.FC = () => {
 
   const handleLoginSuccess = (profile: UserProfile) => {
     setUser(profile);
-    localStorage.setItem('aura_atelier_user', JSON.stringify(profile));
+    try {
+      localStorage.setItem('aura_atelier_user', JSON.stringify(profile));
+      localStorage.setItem('aura_current_view', 'dashboard');
+    } catch {}
     handleNavigateView('dashboard');
-    showToast(`✨ Welcome to Aura Bridal Atelier, ${profile.name.split(' ')[0]}!`);
+    showToast(`✨ Welcome to your Private Atelier Dashboard, ${profile.name.split(' ')[0]}!`);
   };
 
   const handleLogout = () => {
-    setUser(DEFAULT_USER);
-    localStorage.removeItem('aura_atelier_user');
+    setUser(null);
+    try {
+      localStorage.removeItem('aura_atelier_user');
+      localStorage.setItem('aura_current_view', 'store');
+    } catch {}
     handleNavigateView('store');
     showToast('You have signed out of your atelier account.');
   };

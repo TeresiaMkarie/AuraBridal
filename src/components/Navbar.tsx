@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { UserProfile } from '../types';
 
 interface NavbarProps {
@@ -31,19 +31,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef<HTMLDivElement>(null);
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setUserMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleNavClick = (id: string) => {
     setMobileMenuOpen(false);
@@ -101,28 +88,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Style Match
               </a>
-              {onOpenDashboard && (
-                <button
-                  type="button"
-                  onClick={onOpenDashboard}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '2px',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-accent-gold, #C5A880)',
-                    padding: 0,
-                    transition: 'opacity 0.2s ease',
-                  }}
-                  title="Open Wedding Dashboard"
-                >
-                  Dashboard
-                </button>
-              )}
             </nav>
           </div>
 
@@ -192,116 +157,46 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>({cartCount})</span>
             </button>
 
-            {/* Login / Sign Up or Account Menu (right before Book Private Fitting) */}
+            {/* When logged in: direct DASHBOARD & SIGN OUT; when not logged in: GET STARTED */}
             {user ? (
-              <div className="nav-user-menu" ref={userMenuRef}>
-                <button
-                  className="action-link-btn nav-user-trigger"
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  aria-expanded={userMenuOpen}
-                  title={`Account: ${user.name}`}
-                >
-                  <span className="user-avatar-circle" style={{ overflow: 'hidden' }}>
-                    {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      user.name.charAt(0).toUpperCase()
-                    )}
-                  </span>
-                  <span className="user-nav-name">{user.name.split(' ')[0]}</span>
-                  <svg
-                    width="11"
-                    height="11"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
+              <div className="nav-user-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {onOpenDashboard && (
+                  <button
+                    type="button"
+                    className="action-link-btn"
+                    onClick={onOpenDashboard}
+                    title="Open Wedding Dashboard"
                     style={{
-                      transform: userMenuOpen ? 'rotate(180deg)' : 'none',
-                      transition: 'transform 0.2s ease',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      fontWeight: 600,
+                      letterSpacing: '1.2px',
+                      color: 'var(--color-accent-gold, #C5A880)',
                     }}
                   >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </button>
-
-                {userMenuOpen && (
-                  <div className="user-dropdown-card">
-                    <div className="user-dropdown-header">
-                      <div className="user-dropdown-salutation">ATELIER MEMBER</div>
-                      <div className="user-dropdown-name">{user.name}</div>
-                      <div className="user-dropdown-email">{user.email}</div>
-                      {user.role && <div className="user-dropdown-role">{user.role}</div>}
-                      {user.weddingDate && (
-                        <div className="user-dropdown-meta">
-                          Wedding: <strong>{user.weddingDate}</strong>
-                        </div>
-                      )}
-                    </div>
-                    <div className="user-dropdown-menu-items">
-                      {onOpenDashboard && (
-                        <button
-                          className="user-menu-item"
-                          style={{ backgroundColor: '#FFFBEB', color: '#92400E', fontWeight: 600 }}
-                          onClick={() => {
-                            setUserMenuOpen(false);
-                            onOpenDashboard();
-                          }}
-                        >
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                            <rect x="3" y="3" width="7" height="7" rx="1.5" />
-                            <rect x="14" y="3" width="7" height="7" rx="1.5" />
-                            <rect x="14" y="14" width="7" height="7" rx="1.5" />
-                            <rect x="3" y="14" width="7" height="7" rx="1.5" />
-                          </svg>
-                          <span>Wedding Dashboard</span>
-                        </button>
-                      )}
-                      <button
-                        className="user-menu-item"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          onOpenWishlist();
-                        }}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.72-8.72 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                        </svg>
-                        <span>My Wishlist ({wishlistCount})</span>
-                      </button>
-                      <button
-                        className="user-menu-item"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          onOpenBooking();
-                        }}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                          <line x1="16" y1="2" x2="16" y2="6" />
-                          <line x1="8" y1="2" x2="8" y2="6" />
-                          <line x1="3" y1="10" x2="21" y2="10" />
-                        </svg>
-                        <span>Book Private Fitting</span>
-                      </button>
-                      <div className="user-menu-divider" />
-                      <button
-                        className="user-menu-item signout-item"
-                        onClick={() => {
-                          setUserMenuOpen(false);
-                          onLogout();
-                        }}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                          <polyline points="16 17 21 12 16 7" />
-                          <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                      <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                    </svg>
+                    <span>DASHBOARD</span>
+                  </button>
                 )}
+                <button
+                  type="button"
+                  className="action-link-btn"
+                  onClick={onLogout}
+                  title="Sign Out"
+                  style={{
+                    fontSize: '10.5px',
+                    letterSpacing: '1px',
+                    color: '#9CA3AF',
+                  }}
+                >
+                  <span>SIGN OUT</span>
+                </button>
               </div>
             ) : (
               <button
@@ -391,11 +286,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                 BOOK PRIVATE FITTING
               </button>
               {user ? (
-                <div className="mobile-user-row">
-                  <span className="mobile-user-label">
-                    Signed in as <strong>{user.name}</strong>
-                  </span>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '14px' }}>
+                  {onOpenDashboard && (
+                    <button
+                      type="button"
+                      className="mobile-get-started-btn"
+                      style={{ flex: 1, backgroundColor: '#C5A880', color: '#FFFFFF', textAlign: 'center' }}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onOpenDashboard();
+                      }}
+                    >
+                      DASHBOARD
+                    </button>
+                  )}
                   <button
+                    type="button"
                     className="mobile-logout-btn"
                     onClick={() => {
                       setMobileMenuOpen(false);
